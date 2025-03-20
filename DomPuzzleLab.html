@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dom Puzzle</title>
+    <style>
+        #puzzle {width: 500px; height: 500px; border: 5px solid black;}
+    </style>
+</head>
+<body>
+    <h1>Dom Puzzle</h1>
+    <div id='puzzle'></div>
+    <script>
+        puzzle.style.backgroundColor = "#7338a0"
+
+
+
+        const button1 = document.createElement("button");
+        button1.textContent = "A";
+
+        button1.style.fontSize = "16";
+        button1.style.backgroundColor = "#9455f4";
+        button1.style.color = "black";
+        button1.style.height = "125px";
+        button1.style.width = "125px";
+        button1.style.position = "absolute";
+        button1.style.top = "85px";
+        button1.style.left = "11px";
+        document.body.appendChild(button1);
+
+
+
+        const button2 = document.createElement("button");
+        button2.textContent = "B";
+
+        button2.style.fontSize = "16";
+        button2.style.backgroundColor = "#4a2b74";
+        button2.style.color = "black";
+        button2.style.height = "125px";
+        button2.style.width = "125px";
+        button2.style.position = "absolute";
+        button2.style.top = "85px";
+        button2.style.left = "136px";
+        document.body.appendChild(button2);
+
+
+
+        const button3 = document.createElement("button");
+        button3.textContent = "C";
+
+        button3.style.fontSize = "16";
+        button3.style.backgroundColor = "#594492";
+        button3.style.color = "black";
+        button3.style.height = "125px";
+        button3.style.width = "125px";
+        button3.style.position = "absolute";
+        button3.style.top = "210px";
+        button3.style.left = "11px";
+        document.body.appendChild(button3);
+
+
+
+        const button4 = document.createElement("button");
+        button4.textContent = "D";
+
+        button4.style.fontSize = "16";
+        button4.style.backgroundColor = "#854ddc";
+        button4.style.color = "black";
+        button4.style.height = "125px";
+        button4.style.width = "125px";
+        button4.style.position = "absolute";
+        button4.style.top = "210px";
+        button4.style.left = "135px";
+        document.body.appendChild(button4);
+
+
+
+        const numButtons = 100;
+        const gridSize = 10; 
+
+        for (let i = 0; i < numButtons; i++) {
+            const button = document.createElement("button");
+
+            button.style.fontSize = "16px";
+            button.style.backgroundColor = "#c39cfe";
+            button.style.color = "black";
+            button.style.height = "25px";
+            button.style.width = "24px";
+            button.style.position = "absolute";
+
+            const row = Math.floor(i / gridSize); 
+            const col = i % gridSize;
+
+            button.style.top = `${335 + row * 25}px`;  
+            button.style.left = `${260 + col * 25}px`;
+
+            document.body.appendChild(button);
+            button.addEventListener('click', () => {
+                button.style.backgroundColor = "#4A2574";
+            });
+        };
+
+        puzzle.addEventListener('mouseover', () => {
+            puzzle.style.borderColor = "#ff5733"
+        });
+
+        puzzle.addEventListener('mouseout', () => {
+            puzzle.style.borderColor = "transparent"
+        });
+    </script>
+</body>
+</html>
