@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaydens Portfolio</title>
+    <!--<link rel="stylesheet" href="stylesheet for portfolio.css">-->
+</head>
+    <body>
+        <h1>Kayden Groesbeck</h1>
+        <p>My name is Kayden Groesbeck and I go to WSU. 
+            I play lots of video games and I also play a few instruments.
+            I also enjoy 3D printing.</p>
+        <br><br>
+        <h2>Upcoming Projects:</h2>
+        <br><br>
+        <h2>Comment Submission Form:</h2>
+        <form id="signupForm">
+            <label for="email">Email:</label>
+            <input id = "email" name = "useremail" type = "email" title = "Please enter your email.">
+            <br><br>
+
+            <label for="phoneNumber">Phone Number:</label>
+            <input id = "phoneNumber" name = "phoneNumber" placeholder = "###-###-####" pattern = "[0-9] {10}" title = "Please enter your phone number.">
+            <br><br>
+
+            <label for="username">Username:</label>
+            <input id = "username" name = "user" type = "text" autocomplete = "username" pattern = "[a-zA-Z0-9_] {4,8}" title = "Only 4 to 8 characters please.">
+            <br><br>
+            <p id="usernameMessage"></p>
+                
+            <label for="password">Password:</label>
+            <input id = "password" name = "userpass" type = "password"> <br>
+            <p id="passwordMessage"></p>
+
+            <label for="name">Name:</label>
+            <input id = "name" name = "name" type = "text" pattern = "[a-zA-Z]" title = "Please enter your name.">
+            <br><br>
+
+            <label for="comment">Comment:</label>
+            <textarea id = "comment" name = "comment"></textarea>
+            <br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+            
+        <script>	
+            document.getElementById('signupForm').addEventListener("submit", function(event) {
+                event.preventDefault(); // Do not allow form to submit
+
+                //alert("Comment Form Submitted");
+                const password = document.getElementById('password').value;
+                const username = document.getElementById('username').value;
+
+                let comments = document.getElementById('comment').value;
+                comments = comments.replace(/>/, '&gt;');
+                comments = comments.replace(/</, '&lt;');
+                comments = comments.replace(/&/, '&amp;');
+                comments = comments.replace(/"/, '&quot;');
+                comments = comments.replace(/'/, '&apos;');
+
+                console.log(comments);
+
+                event.preventDefault(); // Do not allow form to submit
+
+                if (password.includes(username)) {
+                    event.preventDefault();
+                    alert("Your password cannot contain your username.")
+                }
+            });
+
+            document.getElementById('password').value;
+            
+            document.getElementById('password').addEventListener("input", () => {
+                let password = document.getElementById('password').value;
+                console.log(password);
+
+                const missing = [];
+
+                if (password.length < 8)
+                    missing.push("8 characters minimum");
+
+                let hasLower = /[a-z]/.test(password);
+                if (!hasLower)
+                    missing.push("lower-case letter");
+
+                let hasUpper = /[A-Z]/.test(password);
+                if (!hasUpper)
+                    missing.push("UPPER-CASE LETTER");
+
+                let hasNumber = /[0-9]/.test(password);
+                if (!hasNumber)
+                    missing.push("number");
+                
+                let output = "";
+
+                if (missing.length > 0) {
+				output = "<strong>Missing: </strong>";
+				for (let i = 0; i < missing.length - 1; i++)
+					output += missing[i] + ", ";
+				output += missing[missing.length - 1];
+			}
+
+                document.getElementById('passwordMessage').innerHTML = output;
+
+            });
+
+
+
+            document.getElementById('username').value;
+            
+            document.getElementById('username').addEventListener("input", () => {
+                let username = document.getElementById('username').value;
+                console.log(username);
+
+                const missing = [];
+
+                if (username.length < 8)
+                    missing.push("8 characters minimum");
+
+                let hasLower = /[a-z]/.test(username);
+                if (!hasLower)
+                    missing.push("lower-case letter");
+
+                let hasUpper = /[A-Z]/.test(username);
+                if (!hasUpper)
+                    missing.push("UPPER-CASE LETTER");
+
+                let hasNumber = /[0-9]/.test(username);
+                if (!hasNumber)
+                    missing.push("number");
+                
+                let output = "";
+
+                if (missing.length > 0) {
+				output = "<strong>Missing: </strong>";
+				for (let i = 0; i < missing.length - 1; i++)
+					output += missing[i] + ", ";
+				output += missing[missing.length - 1];
+			}
+
+                document.getElementById('usernameMessage').innerHTML = output;
+            });
+        </script>
+    </body>
+</html>
