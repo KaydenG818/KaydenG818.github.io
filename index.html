@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Lab</title>
+</head>
+<body>
+    <p id="welcome">Welcome <span id="currentUser"></span>!</p>
+    <button onclick="removeCookie()">Sign Out</button>
+    <hr>
+
+    <h2>Sign In</h2>
+    <label for="username">Username</label>
+    <input type="text" id="username" pattern="^[a-zA-Z0-9_]+$" autocomplete="username"> <br><br>
+    <button onclick="signIn()">Sign In</button>
+    <hr>
+
+    <h2>Settings</h2>
+    <label for="colorInput">Enter preferred background color (hex):</label>
+    <input type="text" id="colorInput" pattern="^#[0-9A-Fa-f]{6}$" placeholder="#ffffff"> <br><br>
+    <button onclick="saveSettings()">Update and Save</button>
+    <hr>
+
+    <h2>To-Do List</h2>
+    <label for="todoItem">Task:</label>
+    <input type="text" id="todoItem" pattern="^[a-zA-Z0-9 ]+$"> <br><br>
+    <button onclick="addToDo()">Add Task</button>
+    <ul id="todoList"></ul>
+    <button onclick="clearToDoList()">Clear List</button>
+    
+    <hr>
+    <h2>Additional</h2>
+    <button onclick="location.reload(true)">Page Refresh</button><br><br>
+    <button onclick="clearLocal()">Clear all Settings</button>
+
+    <script>
+        async function fetchExternalData() {
+            try {
+                let response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+                let data = await response.json();
+                //console.log('Fetched external data:', data);
+            } catch (error) {
+                //console.error('Error fetching data:', error);
+            }
+        }
+        
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                console.log('checking', cookie);
+                if (cookie.startsWith(name + '=')) {
+                    console.log("Returning ", cookie.substring(name.length + 1))
+                    return cookie.substring(name.length + 1);
+                }
+            }
+        }
+
+        function removeCookie() {
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            location.reload();
+        }
+
+        function signIn() {
+            alert('signing in');
+            let username = document.getElementById('username');
+            if (!username.checkValidity()) {
+                alert('Invalid Username.');
+                return;
+            }
+            let date = new Date();
+            date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
+            let cookieData = `username=${username.value}; expires=${date.toUTCString()}; path=/`;
+            document.cookie = cookieData;
+            console.log(cookieData);
+            location.reload(true);
+        }
+
+        let currentUser = null;
+        function loadUser() {
+            currentUser = getCookie('username') || 'Guest';
+            document.getElementById('currentUser').textContent = currentUser;
+            if (currentUser !== 'Guest') {
+                const color = localStorage.getItem(currentUser + 'color');
+                if (color) {
+                    document.body.style.backgroundColor = color;
+                }
+            }
+            console.log(currentUser);
+
+            loadToDoList();
+            fetchExternalData();
+        }
+
+        function saveSettings() {
+            const color = document.getElementById('colorInput');
+            if (!color.checkValidity()) {
+                alert('Invalid color.');
+                return;
+            }
+            if (!currentUser || currentUser === 'Guest') {
+                alert ('Must be signed in to save.');
+                return;
+            }
+            document.body.style.backgroundColor = color.value;
+            localStorage.setItem(currentUser + 'color', color.value);
+        }
+
+        function clearLocal() {
+            localStorage.clear();
+            alert("All settings cleared.");
+            location.reload();
+        }
+
+        // TODO: Change sessionStorage to localStorage
+        // TODO: Make a counter that keeps track of number of items - will use sessionStorage
+        // TODO: Fix sign in and make sure page settings saves - make sure this uses cookies
+        // TODO: Implement a REST API to get a joke or quote or something
+        function addToDo() {
+            const task = document.getElementById('todoItem');
+            if (!task.checkValidity() || task.value.trim() === '') {
+                alert('Invalid task. Only letters and numbers allowed.');
+                return;
+            }
+            let todoList = JSON.parse(sessionStorage.getItem('todoList')) || [];
+            todoList.push(task.value);
+            sessionStorage.setItem('todoList', JSON.stringify(todoList));
+            loadToDoList();
+            task.value = '';
+        }
+
+        function loadToDoList() {
+            let todoList = JSON.parse(sessionStorage.getItem('todoList')) || [];
+            console.log(todoList);
+            let listContainer = document.getElementById('todoList');
+            listContainer.innerHTML = '';
+            todoList.forEach((task, index) => {
+                let li = document.createElement('li');
+                li.textContent = task;
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => removeTask(index);
+                li.appendChild(deleteButton);
+                listContainer.appendChild(li);
+            });
+        }
+
+        function removeTask(index) {
+            let todoList = JSON.parse(sessionStorage.getItem('todoList')) || [];
+            todoList.splice(index, 1);
+            sessionStorage.setItem('todoList', JSON.stringify(todoList));
+            loadToDoList();
+        }
+
+        function clearToDoList() {
+            sessionStorage.removeItem('todoList');
+            loadToDoList();
+        }
+
+        loadUser();
+    </script>
+</body>
+</html>
