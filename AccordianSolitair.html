@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordian Solitair</title>
+    <style>
+        p {
+            font-size: 72pt;
+        }
+    </style>
+    <script>
+        class Card {
+            static idGen = 0;
+            #cardId;
+            #cardElement;
+
+            constructor(suit, value) {
+                // These should be private, to fix later
+                this.suit = suit;       // 0 = spades, 1 = hearts, 2 = diamonds, 3 = clubs
+                this.value = value > 11 ? value + 1 : value;
+
+                this.icon = 127136 + (suit * 16) + this.value;
+                this.color = (suit === 0 || suit === 3) ? 'black' : 'red';
+
+                // Will need ID
+                this.#cardId = Card.idGen++;
+
+                // Private "helper" method
+                this.#makeCardElement();
+            }
+            #makeCardElement() {
+                this.#cardElement = document.createElement('span');
+                this.#cardElement.innerHTML = '&#' + this.icon + ';';
+            }
+            get cardElement() {
+                return this.#cardElement;
+            }
+        }
+        let cardTable = document.getElementById('cardTable');
+        let card = new Card(0, 1);
+        cardTable.appendChild(card.cardElement);
+    </script>
+</head>
+<body>
+    <h1>Accordian Solitair</h1>
+    <div id="cardTable"></div>
+    <button>Deal Card</button>
+    <button onclick="dealCard()">Deal Card</button>
+</body>
+</html>
