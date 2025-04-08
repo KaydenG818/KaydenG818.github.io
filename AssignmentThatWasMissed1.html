@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>*insert assignment title here*</title>
+    <script>
+        // Character-Based RPG game
+        // Review of JS Objects
+        character1 = {
+            name: 'John',
+            health: 20,
+            strength: 100
+        };
+
+        character2 = {
+            name: 'Bob',
+            health: 20,
+            strength: 100,
+            defense: 100
+        };
+
+        console.log(character1);
+        console.log(character2);
+
+        // Issues: possible mismatched properties, no behaviors
+
+        // Object constructor function (legacy)
+        // Provides some degree of uniformity
+        // Allowed for behaviors
+        function CharacterOld(name, hp, strength) {
+            this.name = name;
+            this.health = hp;
+            this.strength = strength;
+            this.greet = function() {console.log('Hello.');};
+        }
+        character3 = new CharacterOld('Jack', 25, 200);
+        console.log(character3);
+        character3.greet();
+        // There is no coltrol or protection over our data
+        character3.health -= 1000;
+
+        // Enter classes: Classes are the prefered modern way to work with objects
+        // Classes serve as blueprints or models for an object that can be used in our program
+        // Classes are used to group properties (attributes) and behaviors (methods)
+        // Classes allow for proper data protection (encapsulation) and process hiding (abstraction)
+
+        // Public interface (how users of the class interact with the class):
+        // - constructor
+        // - public methods
+        // - getters and setters
+
+        // Priinciple #1 of OOP: Encapsulation
+        // We (the class designer) are going to control the ins/outs of our class attributes via a public interface
+
+        // Making attributes private with #
+
+        class Character {
+            // Attributes (Properties)
+            #hp;        // Private
+            #role;      // Private
+
+            // Constructor (how the user of the class creates a new object; instance)
+            constructor(name, hp=20, strength=100) {
+                this.name = name;
+                this.#hp = hp;
+                this.strength = strength;
+                this.defense = 100;
+                this.itemInventory = [];
+                this.gold = 0;
+            }
+
+            // Methods (Behaviors)
+            greet() {
+                console.log('Hello');
+            }
+
+            addToInventory(item) {
+                this.itemInventory.push(item);
+            }
+
+            get hp() {
+                return this.#hp;
+            }
+
+            set hp(value) {
+                if (value < 0) 
+                    this.#hp = 0;
+                else
+                    this.#hp = value;
+            }
+
+            get role() {
+                return this.#role;
+            }
+
+            set role(role) {
+                const validRoles = ['knight', 'mage', 'thief'];
+                if (validRoles.includes(role.toLowerCase())) {
+                    this.#role = role;
+                    return;
+                }
+                throw new Error('Invalid role! Must be: knight, mage, thief.');
+            }
+        }
+        
+        john = new Character('John');
+        john.role = 'knight';
+
+        john.addToInventory('Sword');
+        console.log(john);
+
+        //john.hp -= 1000;
+        console.log(john.hp);
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
