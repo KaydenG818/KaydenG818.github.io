@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Game Collection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #media-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .media-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      width: 220px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .media-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .media-card h3 {
+      margin: 10px 0 5px;
+    }
+
+    .media-card p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Video Game Collection</h1>
+  <div id="media-container"></div>
+
+  <script>
+    const jsonData = `[
+      {
+        "title": "The Legend of Zelda: Breath of the Wild",
+        "developer": "Nintendo",
+        "price": 59.99,
+        "image": "images/zelda.jpg"
+      },
+      {
+        "title": "God of War Ragnarok",
+        "developer": "Santa Monica Studio",
+        "price": 69.99,
+        "image": "images/gow.jpg"
+      },
+      {
+        "title": "Elden Ring",
+        "developer": "FromSoftware",
+        "price": 59.99,
+        "image": "images/eldenring.jpg"
+      }
+    ]`;
+
+    class VideoGame {
+      #price;
+
+      constructor(title, developer, price, image) {
+        this.title = title;
+        this.developer = developer;
+        this.image = image;
+        this.price = price;
+      }
+
+      get price() {
+        return this.#price;
+      }
+
+      set price(value) {
+        if (value < 0) {
+          throw new Error("Price cannot be negative.");
+        }
+        this.#price = value;
+      }
+
+      toString() {
+        return `${this.title} by ${this.developer} - $${this.price.toFixed(2)}`;
+      }
+
+      generateHTMLElement() {
+        const card = document.createElement("div");
+        card.classList.add("media-card");
+
+        const img = document.createElement("img");
+        img.src = this.image;
+        img.alt = `${this.title} thumbnail`;
+
+        const title = document.createElement("h3");
+        title.textContent = this.title;
+
+        const dev = document.createElement("p");
+        dev.textContent = `Developer: ${this.developer}`;
+
+        const price = document.createElement("p");
+        price.textContent = `Price: $${this.price.toFixed(2)}`;
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(dev);
+        card.appendChild(price);
+
+        return card;
+      }
+    }
+
+    const videoGameData = JSON.parse(jsonData);
+    const mediaContainer = document.getElementById("media-container");
+
+    videoGameData.forEach(gameData => {
+      const game = new VideoGame(gameData.title, gameData.developer, gameData.price, gameData.image);
+      mediaContainer.appendChild(game.generateHTMLElement());
+    });
+  </script>
+</body>
+</html>
